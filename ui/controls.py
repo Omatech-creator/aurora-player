@@ -3,9 +3,16 @@ seek bar on its own row, then Previous/Play/Stop/Next/Loop/Shuffle on the left a
 Playlist/Fullscreen/Volume on the right. Everything else (speed, snapshot, record,
 subtitles, filters...) lives in the menu bar, same as stock VLC.
 """
-from PySide6.QtCore import Qt, Signal, QPropertyAnimation, QEasingCurve
+
+from PySide6.QtCore import QEasingCurve, QPropertyAnimation, Qt, Signal
 from PySide6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSlider, QLabel, QGraphicsOpacityEffect,
+    QGraphicsOpacityEffect,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSlider,
+    QVBoxLayout,
+    QWidget,
 )
 
 
@@ -21,7 +28,7 @@ class SeekBar(QSlider):
     hover position for thumbnail-preview support."""
 
     hovered_ms = Signal(int)
-    seeked = Signal(int)        # emitted on click or drag-release with the target ms
+    seeked = Signal(int)  # emitted on click or drag-release with the target ms
 
     def __init__(self, parent=None):
         super().__init__(Qt.Horizontal, parent)
@@ -118,8 +125,7 @@ class ControlsBar(QWidget):
         self.shuffle_btn = self._icon_button("🔀", "Random", checkable=True)
         self.shuffle_btn.clicked.connect(self.shuffle_toggled)
 
-        for b in (self.previous_btn, self.play_btn, self.stop_btn, self.next_btn,
-                  self.loop_btn, self.shuffle_btn):
+        for b in (self.previous_btn, self.play_btn, self.stop_btn, self.next_btn, self.loop_btn, self.shuffle_btn):
             buttons_row.addWidget(b)
 
         buttons_row.addStretch(1)
@@ -152,7 +158,9 @@ class ControlsBar(QWidget):
         self._fade_anim.setEasingCurve(QEasingCurve.InOutQuad)
         self._fade_anim.finished.connect(self._on_fade_finished)
 
-    def _icon_button(self, text: str, tooltip: str, checkable: bool = False, object_name: str = "ControlButton") -> QPushButton:
+    def _icon_button(
+        self, text: str, tooltip: str, checkable: bool = False, object_name: str = "ControlButton"
+    ) -> QPushButton:
         btn = QPushButton(text)
         btn.setObjectName(object_name)
         btn.setToolTip(tooltip)

@@ -1,4 +1,5 @@
 """Persists application settings (window state, playback prefs, shortcuts) to SQLite."""
+
 import json
 from typing import Any
 
@@ -11,7 +12,7 @@ DEFAULTS: dict[str, Any] = {
     "volume": 80,
     "muted": False,
     "playback_speed": 1.0,
-    "loop_mode": "off",       # off | one | all
+    "loop_mode": "off",  # off | one | all
     "shuffle": False,
     "hw_acceleration": True,
     "resume_playback": True,
@@ -64,8 +65,7 @@ class SettingsManager:
     def set(self, key: str, value: Any) -> None:
         self._cache[key] = value
         self._db.execute(
-            "INSERT INTO settings (key, value) VALUES (?, ?) "
-            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            "INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
             (key, json.dumps(value)),
         )
 

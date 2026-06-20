@@ -1,19 +1,29 @@
 """Playlist side panel: drag-and-drop reordering, repeat/shuffle toggles, save/load."""
+
 from pathlib import Path
 
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetItem, QPushButton,
-    QLabel, QAbstractItemView, QInputDialog, QFileDialog, QMenu,
+    QAbstractItemView,
+    QFileDialog,
+    QHBoxLayout,
+    QInputDialog,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QMenu,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 
 
 class PlaylistPanel(QWidget):
     """A thin view over PlaylistManager; the manager remains the source of truth."""
 
-    item_activated = Signal(int)     # double-clicked row index -> play
+    item_activated = Signal(int)  # double-clicked row index -> play
     item_removed = Signal(int)
-    items_reordered = Signal(int, int)   # from_index, to_index
+    items_reordered = Signal(int, int)  # from_index, to_index
     save_requested = Signal(str)
     load_requested = Signal(str)
     import_requested = Signal(str)

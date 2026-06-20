@@ -1,4 +1,5 @@
 """SQLite database layer for settings, history, favorites, playlists and bookmarks."""
+
 import sqlite3
 import threading
 from pathlib import Path

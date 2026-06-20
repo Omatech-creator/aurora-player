@@ -1,4 +1,5 @@
 """Tracks recently played media, resume positions, favorites and bookmarks."""
+
 from datetime import datetime, timezone
 
 from backend.database import Database, get_database
@@ -14,8 +15,7 @@ class HistoryManager:
         existing = self._db.fetchone("SELECT id, play_count FROM history WHERE path = ?", (path,))
         if existing:
             self._db.execute(
-                "UPDATE history SET title=?, last_played=?, play_count=play_count+1, duration_ms=? "
-                "WHERE path=?",
+                "UPDATE history SET title=?, last_played=?, play_count=play_count+1, duration_ms=? WHERE path=?",
                 (title, now, duration_ms, path),
             )
         else:
@@ -33,9 +33,7 @@ class HistoryManager:
         return row["position_ms"] if row else 0
 
     def get_recent(self, limit: int = 50):
-        return self._db.fetchall(
-            "SELECT * FROM history ORDER BY last_played DESC LIMIT ?", (limit,)
-        )
+        return self._db.fetchall("SELECT * FROM history ORDER BY last_played DESC LIMIT ?", (limit,))
 
     def clear_history(self) -> None:
         self._db.execute("DELETE FROM history")
@@ -66,9 +64,7 @@ class HistoryManager:
         )
 
     def get_bookmarks(self, path: str):
-        return self._db.fetchall(
-            "SELECT * FROM bookmarks WHERE path = ? ORDER BY position_ms ASC", (path,)
-        )
+        return self._db.fetchall("SELECT * FROM bookmarks WHERE path = ? ORDER BY position_ms ASC", (path,))
 
     def remove_bookmark(self, bookmark_id: int) -> None:
         self._db.execute("DELETE FROM bookmarks WHERE id = ?", (bookmark_id,))

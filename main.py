@@ -1,4 +1,5 @@
 """Application entry point: bootstraps Qt, applies the theme, and shows the main window."""
+
 import sys
 from pathlib import Path
 
@@ -25,6 +26,7 @@ def _set_windows_app_id() -> None:
     if sys.platform.startswith("win"):
         try:
             import ctypes
+
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("AuroraPlayer.Media.1")
         except Exception:
             pass

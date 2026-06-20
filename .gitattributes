@@ -1,0 +1,8 @@
+# Normalize line endings to LF in the repo for all text files so tooling
+# (ruff format --check, etc.) behaves identically on Windows, macOS and Linux CI.
+* text=auto eol=lf
+
+# Treat binaries as binary (never normalize).
+*.ico binary
+*.png binary
+*.db binary

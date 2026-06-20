@@ -1,7 +1,19 @@
 """Tabbed settings/preferences dialog backed by SettingsManager."""
+
 from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QCheckBox, QComboBox,
-    QSpinBox, QLineEdit, QDialogButtonBox, QPushButton, QLabel, QColorDialog,
+    QCheckBox,
+    QColorDialog,
+    QComboBox,
+    QDialog,
+    QDialogButtonBox,
+    QFormLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSpinBox,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
 )
 
 from backend.settings_manager import SettingsManager
@@ -89,7 +101,9 @@ class SettingsDialog(QDialog):
         self.hw_accel_checkbox = QCheckBox("Hardware acceleration")
         self.hw_accel_checkbox.setChecked(self._settings.get("hw_acceleration"))
         form.addRow(self.hw_accel_checkbox)
-        form.addRow(QLabel("4K/8K playback and HDR pass-through follow the source\nand depend on GPU/driver decoder support."))
+        form.addRow(
+            QLabel("4K/8K playback and HDR pass-through follow the source\nand depend on GPU/driver decoder support.")
+        )
 
     def _build_subtitles_tab(self) -> None:
         form = self._add_tab("Subtitles")
@@ -130,7 +144,11 @@ class SettingsDialog(QDialog):
 
     def _build_network_tab(self) -> None:
         form = self._add_tab("Network")
-        form.addRow(QLabel("Network caching, proxy and DLNA/Chromecast discovery\nsettings will appear here as those integrations are added."))
+        form.addRow(
+            QLabel(
+                "Network caching, proxy and DLNA/Chromecast discovery\nsettings will appear here as those integrations are added."
+            )
+        )
 
     def _pick_accent_color(self) -> None:
         color = QColorDialog.getColor(parent=self)

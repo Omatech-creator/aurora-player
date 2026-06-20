@@ -1,0 +1,15 @@
+# Ruff configuration for Aurora Player.
+line-length = 120
+target-version = "py310"
+
+[lint]
+# Pyflakes (F) catches real bugs (unused imports/names, undefined refs);
+# pycodestyle (E/W) covers basic style; I (isort) keeps imports tidy.
+select = ["E", "F", "W", "I"]
+ignore = [
+    "E501",  # line length is enforced loosely; long QSS/strings are fine
+    "E741",  # ambiguous variable names (l, etc.) — not relevant here
+]
+
+[lint.per-file-ignores]
+"__init__.py" = ["F401"]

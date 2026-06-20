@@ -1,5 +1,5 @@
 """Manages the active playlist (queue) plus persistence of named playlists to SQLite."""
-import json
+
 import random
 from datetime import datetime, timezone
 from pathlib import Path
@@ -22,7 +22,7 @@ class PlaylistManager(QObject):
         self._db = db or get_database()
         self._items: list[str] = []
         self._order: list[int] = []  # shuffled index order, identity when shuffle is off
-        self._current_pos = -1       # position within self._order
+        self._current_pos = -1  # position within self._order
         self.repeat_mode = REPEAT_OFF
         self.shuffle = False
 

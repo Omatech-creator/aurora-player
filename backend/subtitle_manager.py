@@ -1,4 +1,5 @@
 """Subtitle discovery and track/delay management on top of the VLC engine."""
+
 from pathlib import Path
 
 SUBTITLE_EXTENSIONS = {".srt", ".ass", ".ssa", ".vtt"}

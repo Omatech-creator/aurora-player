@@ -1,8 +1,18 @@
 """Misc dialogs: open network URL, equalizer, media info, about."""
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QFormLayout, QLineEdit, QPushButton, QLabel,
-    QSlider, QDialogButtonBox, QGridLayout, QPlainTextEdit,
+    QDialog,
+    QDialogButtonBox,
+    QFormLayout,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPlainTextEdit,
+    QPushButton,
+    QSlider,
+    QVBoxLayout,
 )
 
 from backend.vlc_engine import EQUALIZER_BANDS

@@ -4,6 +4,7 @@ audio/video adjustment, subtitle, equalizer and snapshot/record primitives.
 All libVLC calls are funnelled through this class so the rest of the app never
 touches the vlc module directly (keeps UI/backend separated, MVC-style).
 """
+
 from __future__ import annotations
 
 import subprocess
@@ -26,9 +27,9 @@ EQUALIZER_BANDS = (60, 170, 310, 600, 1000, 3000, 6000, 12000, 14000, 16000)
 class VLCEngine(QObject):
     """Wraps a libvlc.Instance + MediaPlayer pair and polls state on a QTimer."""
 
-    position_changed = Signal(int, int)     # current_ms, duration_ms
-    state_changed = Signal(str)             # playing | paused | stopped | ended | error
-    media_changed = Signal(str)             # path of newly loaded media
+    position_changed = Signal(int, int)  # current_ms, duration_ms
+    state_changed = Signal(str)  # playing | paused | stopped | ended | error
+    media_changed = Signal(str)  # path of newly loaded media
     error_occurred = Signal(str)
 
     def __init__(self, hw_acceleration: bool = True, parent=None):
@@ -143,8 +144,10 @@ class VLCEngine(QObject):
 
     def get_subtitle_tracks(self) -> list[tuple[int, str]]:
         descriptions = self._player.video_get_spu_description() or []
-        return [(track_id, label.decode("utf-8", "ignore") if isinstance(label, bytes) else label)
-                for track_id, label in descriptions]
+        return [
+            (track_id, label.decode("utf-8", "ignore") if isinstance(label, bytes) else label)
+            for track_id, label in descriptions
+        ]
 
     def set_subtitle_track(self, track_id: int) -> None:
         self._player.video_set_spu(track_id)
@@ -152,8 +155,10 @@ class VLCEngine(QObject):
     # ---- Audio tracks -----------------------------------------------------------------------------
     def get_audio_tracks(self) -> list[tuple[int, str]]:
         descriptions = self._player.audio_get_track_description() or []
-        return [(track_id, label.decode("utf-8", "ignore") if isinstance(label, bytes) else label)
-                for track_id, label in descriptions]
+        return [
+            (track_id, label.decode("utf-8", "ignore") if isinstance(label, bytes) else label)
+            for track_id, label in descriptions
+        ]
 
     def set_audio_track(self, track_id: int) -> None:
         self._player.audio_set_track(track_id)
@@ -175,7 +180,7 @@ class VLCEngine(QObject):
         media = self._player.get_media()
         if media is None:
             return
-        media.add_option(f":video-filter=rotate")
+        media.add_option(":video-filter=rotate")
         media.add_option(f":rotate-angle={degrees}")
 
     def set_mirror(self, enabled: bool) -> None:
@@ -225,10 +230,20 @@ class VLCEngine(QObject):
         try:
             subprocess.run(
                 [
-                    "ffmpeg", "-y", "-ss", str(start_s), "-i", source_path,
-                    "-t", str(duration_s), "-c", "copy", output_path,
+                    "ffmpeg",
+                    "-y",
+                    "-ss",
+                    str(start_s),
+                    "-i",
+                    source_path,
+                    "-t",
+                    str(duration_s),
+                    "-c",
+                    "copy",
+                    output_path,
                 ],
-                check=True, capture_output=True,
+                check=True,
+                capture_output=True,
             )
             return True
         except Exception as exc:

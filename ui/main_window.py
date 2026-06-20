@@ -5,26 +5,36 @@ for the playlist/library/history/favorites. Wires UI signals to the backend mana
 (engine, playlist, history, subtitles, settings) — this module is the "controller" in
 the MVC split; backend/ holds the model, ui/* holds the views.
 """
+
 from __future__ import annotations
 
 import sys
 from datetime import datetime
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QTimer, QSize
-from PySide6.QtGui import QKeySequence, QShortcut, QAction, QActionGroup, QIcon
+from PySide6.QtCore import QSize, Qt, QTimer
+from PySide6.QtGui import QAction, QActionGroup, QIcon, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStackedWidget, QListWidget,
-    QListWidgetItem, QLineEdit, QFileDialog, QMessageBox, QSplitter, QInputDialog,
-    QMainWindow, QTabWidget, QMenu,
+    QFileDialog,
+    QInputDialog,
+    QLabel,
+    QLineEdit,
+    QListWidget,
+    QListWidgetItem,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QSplitter,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
 )
 
-from backend.playlist_manager import REPEAT_OFF, REPEAT_ONE, REPEAT_ALL
+from backend.playlist_manager import REPEAT_ALL, REPEAT_OFF, REPEAT_ONE
 from player import PlayerSession
-
 from ui.controls import ControlsBar
+from ui.dialogs import AboutDialog, EqualizerDialog, MediaInfoDialog, OpenUrlDialog
 from ui.playlist import PlaylistPanel
-from ui.dialogs import OpenUrlDialog, EqualizerDialog, MediaInfoDialog, AboutDialog
 from ui.settings import SettingsDialog
 
 VIDEO_EXTENSIONS = {".mp4", ".mkv", ".avi", ".mov", ".flv", ".wmv", ".webm", ".mpeg", ".mpg", ".3gp", ".ts"}
@@ -191,16 +201,36 @@ class MainWindow(QMainWindow):
             self._add_action(speed_menu, f"{speed}x", None, lambda _c=False, s=speed: self.engine.set_rate(s))
         self._add_action(playback_menu, "Frame by Frame", "E", self.engine.next_frame)
         playback_menu.addSeparator()
-        self.record_action = self._add_action(playback_menu, "Record", "Ctrl+R", self.action_toggle_record, checkable=True)
+        self.record_action = self._add_action(
+            playback_menu, "Record", "Ctrl+R", self.action_toggle_record, checkable=True
+        )
         playback_menu.addSeparator()
         repeat_group = QActionGroup(self)
         repeat_group.setExclusive(True)
-        self.repeat_off_action = self._add_action(playback_menu, "No Repeat", None,
-                                                    lambda: self._set_repeat_mode(REPEAT_OFF), checkable=True, group=repeat_group)
-        self.repeat_one_action = self._add_action(playback_menu, "Repeat One", None,
-                                                    lambda: self._set_repeat_mode(REPEAT_ONE), checkable=True, group=repeat_group)
-        self.repeat_all_action = self._add_action(playback_menu, "Repeat All", None,
-                                                    lambda: self._set_repeat_mode(REPEAT_ALL), checkable=True, group=repeat_group)
+        self.repeat_off_action = self._add_action(
+            playback_menu,
+            "No Repeat",
+            None,
+            lambda: self._set_repeat_mode(REPEAT_OFF),
+            checkable=True,
+            group=repeat_group,
+        )
+        self.repeat_one_action = self._add_action(
+            playback_menu,
+            "Repeat One",
+            None,
+            lambda: self._set_repeat_mode(REPEAT_ONE),
+            checkable=True,
+            group=repeat_group,
+        )
+        self.repeat_all_action = self._add_action(
+            playback_menu,
+            "Repeat All",
+            None,
+            lambda: self._set_repeat_mode(REPEAT_ALL),
+            checkable=True,
+            group=repeat_group,
+        )
         self.shuffle_action = self._add_action(playback_menu, "Random", None, self._on_shuffle_action, checkable=True)
         playback_menu.addSeparator()
         self._add_action(playback_menu, "Add Bookmark", None, self.action_add_bookmark)
@@ -218,7 +248,9 @@ class MainWindow(QMainWindow):
 
         video_menu = menu_bar.addMenu("&Video")
         self._add_action(video_menu, "Fullscreen", "F", self.toggle_fullscreen)
-        self.always_on_top_action = self._add_action(video_menu, "Always on Top", None, self.toggle_always_on_top, checkable=True)
+        self.always_on_top_action = self._add_action(
+            video_menu, "Always on Top", None, self.toggle_always_on_top, checkable=True
+        )
         self._add_action(video_menu, "Picture in Picture", None, self.toggle_pip)
         self._add_action(video_menu, "Minimal View", "Ctrl+H", self.toggle_mini_player)
         video_menu.addSeparator()
@@ -227,12 +259,17 @@ class MainWindow(QMainWindow):
             self._add_action(zoom_menu, label, None, lambda _c=False, s=scale: self.engine.set_zoom(s))
         aspect_menu = video_menu.addMenu("Aspect Ratio")
         for ratio in ("Auto", "16:9", "4:3", "1:1", "21:9"):
-            self._add_action(aspect_menu, ratio, None,
-                              lambda _c=False, r=ratio: self.engine.set_aspect_ratio(None if r == "Auto" else r))
+            self._add_action(
+                aspect_menu,
+                ratio,
+                None,
+                lambda _c=False, r=ratio: self.engine.set_aspect_ratio(None if r == "Auto" else r),
+            )
         crop_menu = video_menu.addMenu("Crop")
         for ratio in ("None", "16:9", "4:3", "1.85:1", "2.35:1"):
-            self._add_action(crop_menu, ratio, None,
-                              lambda _c=False, r=ratio: self.engine.set_crop(None if r == "None" else r))
+            self._add_action(
+                crop_menu, ratio, None, lambda _c=False, r=ratio: self.engine.set_crop(None if r == "None" else r)
+            )
         rotate_menu = video_menu.addMenu("Rotate")
         for degrees in (0, 90, 180, 270):
             self._add_action(rotate_menu, f"{degrees}°", None, lambda _c=False, d=degrees: self.engine.set_rotation(d))
@@ -240,7 +277,9 @@ class MainWindow(QMainWindow):
         video_menu.addSeparator()
         adjust_menu = video_menu.addMenu("Color Adjustments")
         for name in ("brightness", "contrast", "gamma", "hue", "saturation"):
-            self._add_action(adjust_menu, name.title() + "...", None, lambda _c=False, n=name: self._prompt_adjustment(n))
+            self._add_action(
+                adjust_menu, name.title() + "...", None, lambda _c=False, n=name: self._prompt_adjustment(n)
+            )
         video_menu.addSeparator()
         self._add_action(video_menu, "Take Snapshot", "Shift+S", self.action_take_screenshot)
 
@@ -260,7 +299,9 @@ class MainWindow(QMainWindow):
         self._add_action(tools_menu, "Preferences...", "Ctrl+P", self.action_open_settings)
 
         view_menu = menu_bar.addMenu("&View")
-        self.playlist_action = self._add_action(view_menu, "Playlist", "Ctrl+L", self._toggle_playlist_panel, checkable=True)
+        self.playlist_action = self._add_action(
+            view_menu, "Playlist", "Ctrl+L", self._toggle_playlist_panel, checkable=True
+        )
         self._add_action(view_menu, "Add to Favorites", None, self.action_add_favorite)
         view_menu.addSeparator()
         self._add_action(view_menu, "Sleep Timer...", None, self.action_set_sleep_timer)
@@ -268,8 +309,15 @@ class MainWindow(QMainWindow):
         help_menu = menu_bar.addMenu("&Help")
         self._add_action(help_menu, "About...", None, lambda: AboutDialog(self).exec())
 
-    def _add_action(self, menu: QMenu, text: str, shortcut: str | None, handler, checkable: bool = False,
-                     group: QActionGroup | None = None) -> QAction:
+    def _add_action(
+        self,
+        menu: QMenu,
+        text: str,
+        shortcut: str | None,
+        handler,
+        checkable: bool = False,
+        group: QActionGroup | None = None,
+    ) -> QAction:
         action = QAction(text, self)
         if shortcut:
             action.setShortcut(QKeySequence(shortcut))
@@ -378,8 +426,10 @@ class MainWindow(QMainWindow):
 
     # ---- File/folder/url opening ----------------------------------------------------------
     def action_open_file(self) -> None:
-        filters = "Media Files (*.mp4 *.mkv *.avi *.mov *.flv *.wmv *.webm *.mpeg *.mpg *.3gp *.ts " \
-                   "*.mp3 *.aac *.wav *.flac *.ogg *.m4a);;All Files (*)"
+        filters = (
+            "Media Files (*.mp4 *.mkv *.avi *.mov *.flv *.wmv *.webm *.mpeg *.mpg *.3gp *.ts "
+            "*.mp3 *.aac *.wav *.flac *.ogg *.m4a);;All Files (*)"
+        )
         paths, _ = QFileDialog.getOpenFileNames(self, "Open Media", "", filters)
         if paths:
             self.playlist.add_many(paths)
@@ -505,8 +555,9 @@ class MainWindow(QMainWindow):
         order = [REPEAT_OFF, REPEAT_ALL, REPEAT_ONE]
         next_mode = order[(order.index(self.playlist.repeat_mode) + 1) % len(order)]
         self._set_repeat_mode(next_mode)
-        {REPEAT_OFF: self.repeat_off_action, REPEAT_ONE: self.repeat_one_action,
-         REPEAT_ALL: self.repeat_all_action}[next_mode].setChecked(True)
+        {REPEAT_OFF: self.repeat_off_action, REPEAT_ONE: self.repeat_one_action, REPEAT_ALL: self.repeat_all_action}[
+            next_mode
+        ].setChecked(True)
 
     def _on_shuffle_toggled(self) -> None:
         enabled = self.controls_bar.shuffle_btn.isChecked()
@@ -558,6 +609,7 @@ class MainWindow(QMainWindow):
                 self.engine.enable_equalizer(gains, preamp)
             else:
                 self.engine.disable_equalizer()
+
         EqualizerDialog(on_change, self).exec()
 
     def action_show_media_info(self) -> None:
@@ -671,7 +723,9 @@ class MainWindow(QMainWindow):
             self._pip_window.setStyleSheet("background-color: black;")
             self._pip_window.show()
             win_id = int(self._pip_window.winId())
-            platform = "win32" if sys.platform.startswith("win") else ("darwin" if sys.platform == "darwin" else "linux")
+            platform = (
+                "win32" if sys.platform.startswith("win") else ("darwin" if sys.platform == "darwin" else "linux")
+            )
             self.engine.attach_to_widget(win_id, platform)
         else:
             self._pip_window.close()

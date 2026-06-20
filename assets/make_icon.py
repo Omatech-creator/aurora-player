@@ -6,10 +6,11 @@ Windows picks the crispest size for the taskbar, title bar and Explorer.
 
 Run once:  python assets/make_icon.py
 """
+
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QRectF, QPointF, QBuffer, QByteArray
-from PySide6.QtGui import QImage, QPainter, QLinearGradient, QRadialGradient, QColor, QPolygonF, QBrush, QPen
+from PySide6.QtCore import QBuffer, QByteArray, QPointF, QRectF, Qt
+from PySide6.QtGui import QBrush, QColor, QImage, QLinearGradient, QPainter, QPen, QPolygonF, QRadialGradient
 
 ICON_DIR = Path(__file__).resolve().parent / "icons"
 SIZES = [16, 24, 32, 48, 64, 128, 256]
@@ -44,11 +45,13 @@ def render(size: int) -> QImage:
     # White play triangle, centered and optically balanced.
     cx, cy = size / 2, size / 2
     r = size * 0.20
-    triangle = QPolygonF([
-        QPointF(cx - r * 0.75, cy - r),
-        QPointF(cx - r * 0.75, cy + r),
-        QPointF(cx + r, cy),
-    ])
+    triangle = QPolygonF(
+        [
+            QPointF(cx - r * 0.75, cy - r),
+            QPointF(cx - r * 0.75, cy + r),
+            QPointF(cx + r, cy),
+        ]
+    )
     p.setBrush(QColor("#FFFFFF"))
     p.setPen(QPen(QColor(0, 0, 0, 30), max(1.0, size * 0.01)))
     p.drawPolygon(triangle)

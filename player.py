@@ -4,10 +4,11 @@ Bundles the database connection and all backend managers (settings, history,
 playlist, subtitles, VLC engine) into a single object so the UI layer only
 needs to construct and wire one thing.
 """
+
 from backend.database import get_database
-from backend.settings_manager import SettingsManager
 from backend.history_manager import HistoryManager
 from backend.playlist_manager import PlaylistManager
+from backend.settings_manager import SettingsManager
 from backend.subtitle_manager import SubtitleManager
 from backend.vlc_engine import VLCEngine
 
