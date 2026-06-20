@@ -1,0 +1,225 @@
+/* Dark, Fluent-inspired theme. Accent color is injected as @ACCENT@ at load time. */
+
+* {
+    font-family: "Segoe UI", "Inter", sans-serif;
+    outline: none;
+}
+
+QWidget {
+    background-color: transparent;
+    color: #E8E8EA;
+    font-size: 13px;
+}
+
+QMainWindow {
+    background-color: #16161B;
+}
+
+/* ---------------- Menu bar / menus ---------------- */
+QMenuBar {
+    background-color: #1B1B22;
+    border-bottom: 1px solid #2A2A33;
+    padding: 2px;
+}
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+QMenuBar::item:selected {
+    background-color: rgba(61, 139, 253, 0.22);
+    color: @ACCENT@;
+}
+QMenu {
+    background-color: #1F1F27;
+    border: 1px solid #2A2A33;
+    padding: 4px;
+}
+QMenu::item {
+    padding: 6px 24px;
+    border-radius: 6px;
+}
+QMenu::item:selected {
+    background-color: rgba(61, 139, 253, 0.22);
+    color: @ACCENT@;
+}
+QMenu::separator {
+    height: 1px;
+    background: #2A2A33;
+    margin: 4px 8px;
+}
+
+/* ---------------- Status bar ---------------- */
+QStatusBar {
+    background-color: #1B1B22;
+    border-top: 1px solid #2A2A33;
+    color: #ABABB5;
+}
+
+/* ---------------- Buttons ---------------- */
+QPushButton {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 6px 12px;
+    color: #E8E8EA;
+}
+QPushButton:hover {
+    background-color: rgba(255, 255, 255, 0.10);
+    border-color: @ACCENT@;
+}
+QPushButton:pressed {
+    background-color: rgba(61, 139, 253, 0.25);
+}
+QPushButton:checked {
+    background-color: @ACCENT@;
+    color: #0E0E12;
+    border-color: @ACCENT@;
+}
+
+#ControlButton, #TransportButton {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: none;
+    border-radius: 20px;
+    min-width: 36px;
+    min-height: 36px;
+}
+#ControlButton:hover, #TransportButton:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+#PlayButton {
+    background-color: @ACCENT@;
+    border-radius: 24px;
+    min-width: 48px;
+    min-height: 48px;
+}
+#PlayButton:hover {
+    background-color: #5C9DFF;
+}
+
+/* ---------------- Control bar ---------------- */
+#ControlsOverlay {
+    background-color: #1B1B22;
+    border-top: 1px solid #2A2A33;
+}
+
+#VideoCanvas {
+    background-color: #000000;
+}
+
+/* ---------------- Sliders ---------------- */
+QSlider::groove:horizontal {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+}
+QSlider::sub-page:horizontal {
+    background: @ACCENT@;
+    border-radius: 3px;
+}
+QSlider::handle:horizontal {
+    width: 14px;
+    height: 14px;
+    margin: -5px 0;
+    border-radius: 7px;
+    background: #FFFFFF;
+    border: 2px solid @ACCENT@;
+}
+QSlider::handle:horizontal:hover {
+    background: @ACCENT@;
+    width: 16px;
+    height: 16px;
+    margin: -6px 0;
+    border-radius: 8px;
+}
+
+/* ---------------- Scrollbars ---------------- */
+QScrollBar:vertical {
+    background: transparent;
+    width: 8px;
+    margin: 4px;
+}
+QScrollBar::handle:vertical {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    min-height: 24px;
+}
+QScrollBar::handle:vertical:hover {
+    background: @ACCENT@;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0;
+}
+
+/* ---------------- Lists / playlist / library ---------------- */
+QListWidget, QTreeWidget, QTableWidget {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 4px;
+}
+QListWidget::item, QTreeWidget::item {
+    border-radius: 8px;
+    padding: 8px;
+    margin: 2px;
+}
+QListWidget::item:hover, QTreeWidget::item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+QListWidget::item:selected, QTreeWidget::item:selected {
+    background-color: rgba(61, 139, 253, 0.22);
+    color: #FFFFFF;
+}
+
+/* ---------------- Tabs (settings) ---------------- */
+QTabWidget::pane {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+QTabBar::tab {
+    background: transparent;
+    color: #ABABB5;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin: 2px;
+}
+QTabBar::tab:selected {
+    background: rgba(61, 139, 253, 0.2);
+    color: @ACCENT@;
+    font-weight: 600;
+}
+
+/* ---------------- Inputs ---------------- */
+QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 6px 10px;
+    color: #E8E8EA;
+}
+QLineEdit:focus, QComboBox:focus {
+    border-color: @ACCENT@;
+}
+
+QLabel#SectionTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+QLabel#TimeLabel {
+    color: #ABABB5;
+    font-size: 12px;
+}
+QLabel#MutedLabel {
+    color: #7C7C88;
+    font-size: 12px;
+}
+
+QToolTip {
+    background-color: #1F1F27;
+    color: #E8E8EA;
+    border: 1px solid @ACCENT@;
+    border-radius: 6px;
+    padding: 4px;
+}
